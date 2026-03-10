@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axiom Metrics - Advanced Quantitative Analytics</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF5E00' d='M2.75 3.333c-.414-.414-1.086-.414-1.5 0s-.414 1.086 0 1.5L8.5 12l-7.25 7.167c-.414.414-.414 1.086 0 1.5s1.086.414 1.5 0L10 12l-7.25-8.667zM12 20h10v2H12z'/%3E%3C/svg%3E" sizes="any" type="image/svg+xml">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    /* CSS Variables */
+    :root {
+      --primary: hsl(25 81% 49%); /* #FF5E00 */
+      --primaryLight: hsl(24 70% 69%); /* #FF9A52 */
+      --primaryDark: hsl(25 81% 34%); /* #B24200 */
+      --secondary: hsl(54 61% 49%); /* #D8C333 */
+      --accent: hsl(205 80% 54%); /* #3D9FED */
+      --backgroundDusk: rgba(43, 31, 24, 0.9);
+      --surfaceCards: hsl(0 0% 100%); /* #FFFFFF */
+      --textDark: hsl(25 15% 15%); /* #2B2420 */
+      --textLight: hsl(0 0% 100%); /* #FFFFFF */
+
+      --border-radius-global: 12px;
+      --section-spacing-y: 6rem;
+      --hover-translateY-large: translateY(-12px);
+    }
+
+    /* Base styles, mobile-first */
+    body {
+      font-family: 'Lora', serif;
+      color: var(--textDark);
+      line-height: 1.6;
+      background-color: var(--surfaceCards);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      color: var(--textDark);
+    }
+
+    .spacious {
+      padding-top: var(--section-spacing-y);
+      padding-bottom: var(--section-spacing-y);
+    }
+
+    /* Global border-radius */
+    .border-radius-global {
+      border-radius: var(--border-radius-global);
+    }
+
+    /* Shadow subtle effect for cards */
+    .shadow-subtle {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border: none;
+    }
+
+    /* Hover effect: translateY-large */
+    .hover-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+      transform: var(--hover-translateY-large);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    /* Icon containers */
+    .icon-square {
+      border-radius: 0; /* Square corners */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem; /* Example size */
+      height: 3rem; /* Example size */
+      background-color: var(--accent); /* Example color */
+      color: var(--textLight);
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      background-color: transparent;
+    }
+    .navbar.scrolled {
+      background-color: var(--surfaceCards) !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .navbar-brand, .nav-link {
+        color: var(--textLight) !important; /* Initial transparent state */
+    }
+    .navbar.scrolled .navbar-brand, .navbar.scrolled .nav-link {
+        color: var(--textDark) !important;
+    }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+    }
+    .navbar.scrolled .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(43, 31, 24, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+    }
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    .navbar.scrolled .navbar-toggler {
+      border-color: rgba(43, 31, 24, 0.5) !important;
+    }
+
+    /* Buttons */
+    .btn-solid-accent {
+      background-color: var(--accent);
+      color: var(--textLight);
+      border: none;
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--border-radius-global);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .btn-solid-accent:hover {
+      background-color: hsl(205 80% 44%); /* Slightly darker accent */
+      color: var(--textLight);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero-overlay {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      color: var(--textLight);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+    }
+    .hero-overlay::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(200, 75, 10, 0.8), rgba(15, 65, 120, 0.8));
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      margin-bottom: 1rem;
+      color: var(--textLight);
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      max-width: 800px;
+      margin: 0 auto 2rem auto;
+      color: var(--textLight);
+    }
+
+    /* Bento Grid */
+    .bento-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Mobile first, single column potentially */
+      grid-auto-rows: minmax(200px, auto); /* Default row height */
+    }
+
+    .bento-item {
+      background-color: var(--surfaceCards);
+      padding: 1.5rem;
+      border-radius: var(--border-radius-global);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .bento-item img {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: var(--border-radius-global);
+      margin-bottom: 1rem;
+    }
+    .bento-item.large img {
+      max-height: 300px;
+    }
+
+    /* Staggered Bento grid for wider screens */
+    @media (min-width: 768px) {
+      .bento-grid-staggered {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
+      }
+      .bento-grid-staggered .bento-item.large:nth-child(1) {
+        grid-row: span 1;
+        grid-column: span 1;
+      }
+      .bento-grid-staggered .bento-item.large:nth-child(2) {
+        grid-row: span 1;
+        grid-column: span 1;
+      }
+      .bento-grid-staggered .bento-item.small:nth-child(3) {
+        grid-row: span 1;
+        grid-column: span 1;
+      }
+      .bento-grid-staggered .bento-item.small:nth-child(4) {
+        grid-row: span 1;
+        grid-column: span 1;
+      }
+      .bento-grid-staggered .bento-item.small:nth-child(5) {
+        grid-row: span 1;
+        grid-column: span 2; /* Smallest item spanning two columns */
+      }
+    }
+    @media (min-width: 992px) {
+      .bento-grid-staggered {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .bento-grid-staggered .bento-item.large {
+        grid-column: span 1;
+        min-height: 400px; /* Ensure larger items have a defined height */
+      }
+      .bento-grid-staggered .bento-item.small {
+        min-height: 200px; /* Ensure smaller items have a defined height */
+      }
+      .bento-grid-staggered .bento-item:nth-child(1) { /* Algo Trading */
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+      }
+      .bento-grid-staggered .bento-item:nth-child(2) { /* Predictive Analytics */
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+      .bento-grid-staggered .bento-item:nth-child(3) { /* Data Modeling */
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+      }
+      .bento-grid-staggered .bento-item:nth-child(4) { /* Risk Assessment */
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+      .bento-grid-staggered .bento-item:nth-child(5) { /* Statistical Analysis */
+        grid-column: 1 / 3; /* Spans full width */
+        grid-row: 3 / 4;
+      }
+    }
+
+
+    /* Methodology Section */
+    .methodology-feature img {
+      border-radius: var(--border-radius-global);
+      object-fit: contain;
+      width: 100%;
+      height: auto;
+      max-height: 250px;
+      margin-bottom: 1.5rem;
+    }
+    .methodology-feature h3 {
+      color: var(--primaryDark);
+      margin-top: 1rem;
+    }
+
+    /* Testimonials */
+    .testimonial-card {
+      background-color: var(--primary);
+      color: var(--textLight);
+      padding: 3rem 1.5rem;
+      border-radius: var(--border-radius-global);
+      text-align: center;
+    }
+    .testimonial-card img {
+      width: 128px;
+      height: 128px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid var(--primaryLight);
+      margin: 0 auto 1.5rem auto;
+      display: block;
+    }
+    .testimonial-card blockquote {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      color: var(--textLight);
+    }
+    .testimonial-card footer {
+      font-size: 1rem;
+      color: var(--primaryLight);
+    }
+    .testimonial-card footer strong {
+      color: var(--textLight);
+    }
+
+    /* Contact Section */
+    .bg-light {
+      background-color: hsl(0 0% 95%) !important; /* Slightly off-white for contrast */
+    }
+    .contact-details {
+        background-color: var(--surfaceCards);
+        border-radius: var(--border-radius-global);
+        padding: 2rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow */
+    }
+    .contact-details h3 {
+        color: var(--primary);
+    }
+    .contact-details p {
+        margin-bottom: 0.5rem;
+    }
+    .contact-map {
+        border-radius: var(--border-radius-global);
+        overflow: hidden;
+        margin-top: 2rem; /* Spacing for small screens */
+    }
+    .contact-map iframe {
+        width: 100%;
+        height: 350px;
+        border: 0;
+    }
+
+    @media (min-width: 992px) {
+        .contact-map {
+            margin-top: 0; /* Remove top margin for larger screens */
+        }
+    }
+
+
+    /* Footer */
+    footer {
+        background-color: var(--backgroundDusk) !important;
+        color: var(--textLight) !important;
+    }
+    footer a {
+        color: var(--primaryLight) !important;
+        text-decoration: none;
+    }
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    /* Utility classes for text colors */
+    .text-primary { color: var(--primary) !important; }
+    .text-light { color: var(--textLight) !important; }
+    .bg-primary { background-color: var(--primary) !important; }
+    .bg-dark { background-color: var(--backgroundDusk) !important; } /* Reusing backgroundDusk for dark footer */
+
+    .transition-all {
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav id="mainNav" class="navbar navbar-expand-lg fixed-top transition-all">
+      <div class="container">
+        <a class="navbar-brand text-light" href="#">
+          <svg style="vertical-align: middle; margin-right: 8px;" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 17L12 14L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 14V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 7L12 12L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 7L12 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 7L12 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Axiom Metrics
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#services">Services 🚀</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#approach">Our Magic 🧮</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#testimonials">Praise ✨</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Ping Us 📞</a>
+            </li>
+            <li class="nav-item ms-lg-3">
+              <a class="btn btn-solid-accent" href="#contact">Get Analytics</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-overlay text-center" style="background-image: url('images/hero-data-viz-overlay-1280x768.jpeg');">
+      <div class="container hero-content">
+        <h1 class="display-3 fw-bold">Let's Make Your Data Dance! 🕺📈</h1>
+        <p class="lead mb-4">Welcome to Axiom Metrics. We turn boring numbers into wildly profitable algorithmic strategies, beautiful predictive models, and bulletproof risk assessments.</p>
+        <a class="btn btn-solid-accent btn-lg" href="#services">Explore Services 🎯</a>
+      </div>
+    </div>
+  </header>
+<main>
+<style>
+  #terms-and-conditions-section-axiommetrics {
+    padding-top: 7rem;
+  }
+</style>
+<section id="terms-and-conditions-section-axiommetrics">
+    <h2 style="font-size: 2.25rem; font-weight: 700; margin-bottom: 2rem; margin-top: 0;">Terms and Conditions</h2>
+
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Welcome to Axiom Metrics! These Terms and Conditions ("Terms") govern your access to and use of our website and services, including data modeling, algorithmic trading, risk assessment, statistical analysis, and predictive analytics.</p>
+    <p style="font-size: 1rem; margin-bottom: 2rem; line-height: 1.6;">By accessing or using our online platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, please do not use our services.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">1. Acceptance of Terms</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">By using our online platform or engaging with our services, you signify your understanding and agreement to these Terms. These Terms constitute a legally binding agreement between you and Axiom Metrics.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">2. Services Provided</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Axiom Metrics specializes in advanced quantitative analytics. Our services include, but are not limited to, data modeling, development and deployment of algorithmic trading strategies, comprehensive risk assessment, rigorous statistical analysis, and insightful predictive analytics. The specific scope of services for any client engagement will be outlined in a separate service agreement or proposal.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">3. User Obligations</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">As a user of our online platform and services, you agree to:</p>
+    <ul style="list-style: disc; margin-left: 2rem; margin-bottom: 1.5rem;">
+        <li style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">Provide accurate, current, and complete information as requested.</li>
+        <li style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">Use our services only for lawful purposes and in a manner that does not infringe on the rights of others or restrict or inhibit anyone else's use and enjoyment of our services.</li>
+        <li style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">Maintain the confidentiality of any access credentials provided for our secure client platforms.</li>
+        <li style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">Not to introduce any viruses, Trojan horses, worms, logic bombs, or other malicious or technologically harmful material.</li>
+    </ul>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">4. Intellectual Property</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">All content on this online platform, including text, graphics, logos, software, and the methodologies employed in our services, are the property of Axiom Metrics or its licensors and are protected by intellectual property laws. You may not reproduce, distribute, modify, or create derivative works of any content without express written permission from Axiom Metrics.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">5. Disclaimer of Warranties</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Our services and the content on this online platform are provided "as is" and "as available" without any warranties of any kind, either express or implied, including but not limited to, implied warranties of merchantability, fitness for a particular purpose, or non-infringement. Axiom Metrics does not warrant that our services will be uninterrupted or error-free, nor do we make any warranty as to the results that may be obtained from the use of our services.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">6. Limitation of Liability</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">To the fullest extent permitted by applicable law, Axiom Metrics will not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from (a) your access to or use of or inability to access or use our services; (b) any conduct or content of any third party on our services; (c) any content obtained from our services; and (d) unauthorized access, use, or alteration of your transmissions or content.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">7. Indemnification</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">You agree to defend, indemnify, and hold harmless Axiom Metrics, its affiliates, licensors, and service providers, and its respective officers, directors, employees, contractors, agents, licensors, suppliers, successors, and assigns from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms or your use of our services.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">8. Governing Law and Jurisdiction</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">These Terms shall be governed by and construed in accordance with the laws of the State of New York, without regard to its conflict of law provisions. Any legal action or proceeding arising under these Terms will be brought exclusively in the federal or state courts located in New York, New York, and you hereby consent to the personal jurisdiction and venue therein.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">9. Changes to Terms</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">Axiom Metrics reserves the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our online platform after those revisions become effective, you agree to be bound by the revised terms.</p>
+
+    <h3 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1.25rem;">10. Contact Information</h3>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">If you have any questions about these Terms, please contact us at:</p>
+    <p style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">Axiom Metrics</p>
+    <p style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">80 Greene Avenue</p>
+    <p style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.6;">New York, New York, 11238</p>
+    <p style="font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">USA</p>
+</section>
+</main>
+<footer id="footer" class="bg-dark text-light py-4">
+    <div class="container text-center">
+      <p class="mb-2">&copy; 2024 Axiom Metrics. Spreadsheets and smiles all rights reserved. 😊</p>
+      <p class="mb-2"><strong>Axiom Metrics Quantitative Analytics</strong></p>
+      <ul class="list-inline mb-0">
+        <li class="list-inline-item"><a href="./privacy.html" class="text-primaryLight">Privacy Policy</a></li>
+        <li class="list-inline-item">&bull;</li>
+        <li class="list-inline-item"><a href="./tos.html" class="text-primaryLight color: var(--primaryLight);">Terms of Service</a></li>
+      </ul>
+    </div>
+    
+    <div id="cookieConsentBanner" class="position-fixed bottom-0 start-0 w-100 bg-secondary text-dark p-3 text-center shadow-lg" style="display: none; z-index: 1050;">
+      <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <p class="mb-2 mb-md-0 me-md-3">We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.</p>
+        <button id="acceptCookies" class="btn btn-primaryLight">Accept</button>
+      </div>
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /**
+     * @file Global JavaScript functions for Axiom Metrics website.
+     * @author Axiom Metrics Team
+     * @version 1.0.0
+     */
+
+    /**
+     * IIFE (Immediately Invoked Function Expression) for encapsulating site-wide JavaScript.
+     * Prevents global scope pollution and ensures all scripts run after the DOM is ready.
+     */
+    (function() {
+      'use strict';
+
+      /**
+       * Initializes all necessary components and event listeners on DOMContentLoaded.
+       * @function init
+       */
+      function init() {
+          setupNavbarScrollEffect();
+          handleCookieConsent();
+      }
+
+      /**
+       * Adds a scroll event listener to the window to change the navbar's appearance.
+       * The navbar transitions from transparent to solid white with a shadow on scroll.
+       * @function setupNavbarScrollEffect
+       */
+      function setupNavbarScrollEffect() {
+          const navbar = document.getElementById('mainNav');
+          if (navbar) {
+              window.addEventListener('scroll', () => {
+                  if (window.scrollY > 50) { // Adjust scroll threshold as needed
+                      navbar.classList.add('scrolled');
+                      // Change nav-link color for better contrast on solid background
+                      document.querySelectorAll('#mainNav .nav-link, #mainNav .navbar-brand').forEach(link => {
+                        link.style.color = 'var(--textDark)';
+                      });
+                  } else {
+                      navbar.classList.remove('scrolled');
+                      // Revert nav-link color for transparent background
+                      document.querySelectorAll('#mainNav .nav-link, #mainNav .navbar-brand').forEach(link => {
+                        link.style.color = 'var(--textLight)';
+                      });
+                  }
+              });
+              // Trigger once on load in case the page is loaded scrolled
+              window.dispatchEvent(new Event('scroll'));
+          }
+      }
+
+      /**
+       * Manages the cookie consent banner's visibility and user interaction.
+       * Uses localStorage to remember user's choice.
+       * @function handleCookieConsent
+       */
+      function handleCookieConsent() {
+        const consentBanner = document.getElementById('cookieConsentBanner');
+        const acceptButton = document.getElementById('acceptCookies');
+        // Unique prefix for cookie name to prevent conflicts
+        const cookieName = 'consent_Axiom Metrics_accepted'; 
+
+        /**
+         * Checks if the user has previously accepted cookies.
+         * @returns {boolean} True if consent is found, false otherwise.
+         */
+        function getCookieConsent() {
+          return localStorage.getItem(cookieName);
+        }
+
+        /**
+         * Sets the cookie consent status to true.
+         */
+        function setCookieConsent() {
+          localStorage.setItem(cookieName, 'true');
+        }
+
+        // Show banner if consent not given
+        if (!getCookieConsent() && consentBanner) {
+          consentBanner.style.display = 'block';
+        }
+
+        // Handle accept button click
+        if (acceptButton) {
+          acceptButton.addEventListener('click', () => {
+            setCookieConsent();
+            if (consentBanner) {
+              consentBanner.style.display = 'none';
+            }
+          });
+        }
+      }
+
+      // Initialize the script when the DOM is fully loaded.
+      document.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
+</body>
+</html>
